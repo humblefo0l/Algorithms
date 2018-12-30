@@ -5,7 +5,6 @@ public class QuickSort {
     public static void main(String[] args) {
         SelectionSort selectionSort = new SelectionSort();
         QuickSort obj = new QuickSort();
-
         int arr[] = {3,5,6,7,1,44};
 
         obj.quickSort(arr, 0, 5);

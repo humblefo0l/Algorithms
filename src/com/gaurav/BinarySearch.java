@@ -6,7 +6,6 @@ public class BinarySearch {
 
         int arr[] = {2,4,5,7,8,88};
         int x = 88;
-
         int result =  binarySearch(arr, x);
 
         if (result >-1){
