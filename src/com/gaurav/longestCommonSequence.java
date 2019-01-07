@@ -54,26 +54,23 @@ public class longestCommonSequence {
         int length1 = char1.length;
         int length2 = char2.length;
 
-        return _lcs(char1, char2, length1, length2);
+//        return _lcs_TC_OofnSquare(char1, char2, length1, length2);
+        return _lcs_TC_OofLength1Length2(char1, char2, length1, length2);
     }
 
     /*
-    2) Overlapping Subproblems:
-        Following is simple recursive implementation of the LCS problem. The implementation simply follows the
-        recursive structure mentioned below.
-
-        Time complexity of the above naive recursive approach is O(2^n) in worst case and worst case happens when
+        Time complexity of the below naive recursive approach is O(2^n) in worst case and worst case happens when
         all characters of X and Y mismatch i.e., length of LCS is 0.
     */
-    static int _lcs(char[] char1, char[] char2, int length1, int length2){
+    static int _lcs_TC_OofnSquare(char[] char1, char[] char2, int length1, int length2){
 
         if (length1 == 0 || length2 == 0)
             return 0;
 
         if (char1[length1-1] == char2[length2-1]){
-            return 1 + _lcs(char1, char2, length1-1, length2-1);
+            return 1 + _lcs_TC_OofnSquare(char1, char2, length1-1, length2-1);
         }else {
-            return max(_lcs(char1, char2, length1, length2-1), _lcs(char1, char2, length1-1, length2));
+            return max(_lcs_TC_OofnSquare(char1, char2, length1, length2-1), _lcs_TC_OofnSquare(char1, char2, length1-1, length2));
         }
 
     }
@@ -82,4 +79,47 @@ public class longestCommonSequence {
         return a > b ? a: b ;
     }
 
+
+    /*
+    2) Overlapping Subproblems:
+        Following is simple recursive implementation of the LCS problem. The implementation simply follows the
+        recursive structure mentioned below.
+
+    Considering the above implementation, following is a partial recursion tree for input strings “AXYT” and “AYZX”
+
+                             lcs("AXYT", "AYZX")
+                           /
+             lcs("AXY", "AYZX")            lcs("AXYT", "AYZ")
+             /                              /
+    lcs("AX", "AYZX") lcs("AXY", "AYZ")   lcs("AXY", "AYZ") lcs("AXYT", "AY")
+
+
+    In the above partial recursion tree, lcs(“AXY”, “AYZ”) is being solved twice. If we draw the complete recursion
+    tree, then we can see that there are many subproblems which are solved again and again. So this problem has
+    Overlapping Substructure property and recomputation of same subproblems can be avoided by either using
+    Memoization or Tabulation. Following is a tabulated implementation for the LCS problem.
+
+    Time Complexity of the below implementation is O(mn) which is much better than the worst-case time complexity
+    of Naive Recursive implementation.
+
+
+    */
+    static int _lcs_TC_OofLength1Length2(char[] chars1, char[] chars2, int length1, int length2){
+
+        int[][] lcsTemp = new int[length1+1][length2+1];
+
+        for (int i=0; i<=length1; i++){
+            for (int j=0; j<=length2; j++){
+                if (i == 0 || j == 0){
+                    lcsTemp[i][j] = 0;
+                }else if (chars1[i-1] == chars2[j-1]){
+                    lcsTemp[i][j] = lcsTemp[i-1][j-1] + 1 ;
+                }else {
+                    lcsTemp[i][j] = max(lcsTemp[i-1][j], lcsTemp[i][j-1]);
+                }
+            }
+        }
+
+        return lcsTemp[length1][length2];
+    }
 }
