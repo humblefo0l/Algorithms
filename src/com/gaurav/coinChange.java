@@ -31,8 +31,6 @@ public class coinChange {
                     combinations[i] += combinations[i-coin];
             }
         }
-
         return combinations[value];
     }
-
 }
